@@ -16,12 +16,12 @@ namespace WindowsFormsApplication1
         public float ITcond;
         public float cmoycond;
 
-        public cond(string n, int o, int e, float cmoy, float IT, bool vu) // constructeur  des conditions  
+        public cond(string n, int o, int e, float cmoy, float IT) // constructeur  des conditions  
         {
             nom = n;
             condOrigine = o;
             condExtremite = e;
-            traite = vu;
+          
             ITcond = IT;
             cmoycond = cmoy;
         }
@@ -52,11 +52,7 @@ namespace WindowsFormsApplication1
             get { return ITcond; }
             set { ITcond = value; }
         }
-        public bool conditionTraitee
-        {
-            get { return traite; }
-            set { traite = value; }
-        }
+       
     }
 
 
@@ -71,13 +67,11 @@ namespace WindowsFormsApplication1
         public float cfDlOrigine;
         public float cfDlExtremite;
 
-        public cf(string nom, int cfO, int cfE, float cmoy, float IT, float DlO, float DlE, bool vu) // constructeur Cf
+        public cf(string nom, int cfO, int cfE, float cmoy, float DlO, float DlE) // constructeur Cf
         {
             cfname = nom;
             cfOrigine = cfO;
-            cfExtremite = cfE;
-            cfTraite = vu;
-            cfIT = IT;
+            cfExtremite = cfE;                  
             cfCmoy = cmoy;
             cfDlOrigine = DlO;
             cfDlExtremite = DlE;
