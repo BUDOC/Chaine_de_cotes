@@ -10,10 +10,7 @@ namespace WindowsFormsApplication1
     {
         public cond[] TabCond = new cond[10];
         public cf[] TabCf = new cf[10];
-
         
-
-
         public void iniTabcf() //Tableau des cf vide
         {
             for (int i = 0; i <= 9; i++)
@@ -30,55 +27,73 @@ namespace WindowsFormsApplication1
         }
         public void chargePourTest()// charge des valeurs pour tester l'algo
         {            
-            cond C= new cond("C1", 3, 4, 50f, 1f); //la condition
-            TabCond[0] = C;
+           // cond C= new cond("C1", 3, 4, 50f, 1f); //la condition
+            cond Cx =new cond();
+            Cx.condName="c1";
+            Cx.conditionOrigine=3;
+            Cx.conditionExtremite=4;
+            Cx.conditionCmoy=50f;
+            Cx.conditionIT=1f;
+            TabCond[0] = Cx;
 
             cf cf=new cf("cf1",4,5,20.1f,0.2f,0.3f);
             TabCf[0] = cf;
-          
-            cf.cfname = "cf2"; //====
-            
-            cf.cfOrigine = 3;
-            cf.cfExtremite = 1;
-            cf.cfCmoy = 15;
+            cf = new cf(); //Création d'un nouveau pointeur pour pouvoir avoir un pointeur différent dans le tableau'
+            cf.Name= "cf2"; //====            
+            cf.Origine = 1;
+            cf.Extremite = 3;
+            cf.CoteMoyenne= 16f;
+            cf.DipersionOrigine=0.1f;
+            cf.DipersionExtremite=0.2f;
             TabCf[1] = cf;
-            
-            cf.cfname = "cf3"; //====
-            cf.cfOrigine = 5;
-            cf.cfExtremite = 6;
-            cf.cfCmoy = 15;
+            cf = new cf(); //Création d'un nouveau pointeur pour pouvoir avoir un pointeur différent dans le tableau'
+            cf.Name = "cf3";
+            cf.Origine = 5;
+            cf.Extremite = 6;
+            cf.CoteMoyenne=15f;
+            cf.DipersionOrigine=0.1f;
+            cf.DipersionExtremite=0.2f;
             TabCf[2] = cf;
-         
-            cf.cfname = "cf4"; //====
-            cf.cfOrigine = 0;
-            cf.cfExtremite = 1;
-            cf.cfCmoy = 15.2f;
+            cf = new cf(); //Création d'un nouveau pointeur pour pouvoir avoir un pointeur différent dans le tableau'
+            cf.Name = "cf4";
+            cf.Origine = 0;
+            cf.Extremite = 1;
+            cf.CoteMoyenne = 14f;
+            cf.DipersionOrigine = 0.1f;
+            cf.DipersionExtremite = 0.2f;
             TabCf[3] = cf;
-            
-            cf.cfname = "cf5"; //====
-            cf.cfOrigine = 0;
-            cf.cfExtremite = 6;
-            cf.cfCmoy = 15;
+            cf = new cf(); //Création d'un nouveau pointeur pour pouvoir avoir un pointeur différent dans le tableau'
+            cf.Name = "cf5";
+            cf.Origine = 0;
+            cf.Extremite = 6;
+            cf.CoteMoyenne = 50f;
+            cf.DipersionOrigine = 0.1f;
+            cf.DipersionExtremite = 0.2f;
             TabCf[4] = cf;
-
-            cf.cfname = "cf6"; //====
-            cf.cfOrigine = 7;
-            cf.cfExtremite = 7;
-            cf.cfCmoy = 15;
+            cf = new cf(); //Création d'un nouveau pointeur pour pouvoir avoir un pointeur différent dans le tableau'
+            cf.Name = "cf6";
+            cf.Origine = 4;
+            cf.Extremite = 7;
+            cf.CoteMoyenne = 18f;
+            cf.DipersionOrigine = 0.1f;
+            cf.DipersionExtremite = 0.2f;
             TabCf[5] = cf;
-
-            cf.cfname = "cf7"; //====
-            cf.cfOrigine = 2;
-            cf.cfExtremite = 4;
-            cf.cfCmoy = 15;
+            cf = new cf(); //Création d'un nouveau pointeur pour pouvoir avoir un pointeur différent dans le tableau'
+            cf.Name = "cf7";
+            cf.Origine = 2;
+            cf.Extremite = 4;
+            cf.CoteMoyenne = 25f;
+            cf.DipersionOrigine = 0.1f;
+            cf.DipersionExtremite = 0.2f;
             TabCf[6] = cf;
-
-            cf.cfname = "cf8"; //====
-            cf.cfOrigine = 3;
-            cf.cfExtremite = 8;
-            cf.cfCmoy = 15;
-            TabCf[7] = cf;
-           
+            cf = new cf(); //Création d'un nouveau pointeur pour pouvoir avoir un pointeur différent dans le tableau'
+            cf.Name = "cf8";
+            cf.Origine = 3;
+            cf.Extremite = 8;
+            cf.CoteMoyenne = 22f;
+            cf.DipersionOrigine = 0.1f;
+            cf.DipersionExtremite = 0.2f;
+            TabCf[7] = cf;           
         }
     }
  

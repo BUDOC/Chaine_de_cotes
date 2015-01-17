@@ -23,7 +23,10 @@ namespace WindowsFormsApplication1
             ITcond = IT;
             cmoycond = cmoy;
         }
-
+        public cond()
+        {
+            //constructeur vide
+        }
         //============= getteurs et setteurs de conditions =============
         public string condName
         {
@@ -65,6 +68,10 @@ namespace WindowsFormsApplication1
         public float cfDlOrigine;
         public float cfDlExtremite;
 
+        public cf() // constructeur vide
+        {
+        }
+        
         public cf(string nomcf, int cfO, int cfE, float cmoy, float DlO, float DlE) // constructeur Cf
         {
             cfname = nomcf;
@@ -75,8 +82,36 @@ namespace WindowsFormsApplication1
             cfDlExtremite = DlE;              
         }
         //============= getteurs et setteurs de conditions =============
-
-       
+        public string Name
+        {
+            get { return cfname; }
+            set { cfname= value; }
+        }
+        public int Origine
+        {
+            get { return cfOrigine; }
+            set { cfOrigine = value; }
+        }
+        public int Extremite
+        {
+            get { return cfExtremite; }
+            set { cfExtremite = value; }
+        }
+        public float CoteMoyenne
+        {
+            get { return cfCmoy; }
+            set { cfCmoy = value; }
+        }
+        public float DipersionOrigine
+        {
+            get { return cfDlOrigine; }
+            set { cfDlOrigine = value; }
+        }
+        public float DipersionExtremite
+        {
+            get { return cfDlExtremite; }
+            set { cfDlExtremite = value; }
+        }
     }
 
    
