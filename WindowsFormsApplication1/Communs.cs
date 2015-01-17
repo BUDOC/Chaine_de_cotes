@@ -74,7 +74,7 @@ namespace WindowsFormsApplication1
             cfExtremite = cfE;                  
             cfCmoy = cmoy;
             cfDlOrigine = DlO;
-            cfDlExtremite = DlE;
+            cfDlExtremite = DlE;       
         }
 
 
