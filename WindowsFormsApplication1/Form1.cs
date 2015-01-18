@@ -16,6 +16,8 @@ namespace WindowsFormsApplication1
         public cond C1;
         public cf cf1;
         Tablos tablo = new Tablos();
+        int t = 9; //taille caractere du richedit
+        int lgc = 4; // longueur des cote dans le richedit
 
         public Form1()
         {
@@ -31,34 +33,31 @@ namespace WindowsFormsApplication1
             tablo.iniTabcf();
             tablo.iniTabCond();
             tablo.chargePourTest();
-            affiche();
-         
+            this.afficheToutCf(3);
         }
-       
 
-        public void affiche() //Tableau des cf vide
+
+        public void afficheToutCf(int L) //Tableau des cf vide
         {
+            int nbc = L;
             string S = "";
-            this.richTextBox1.Clear();
-            this.richTextBox1.Font = new Font("Courier New", 8, FontStyle.Regular);
-
+            this.richTextBox1.Clear();    
             for (int i = 0; i <= 10; i++)  //n identification des surfaces en haut du richtextbox
             {
-                S = S + i.ToString() + "      ";
+                S = S + i.ToString();
+                for (int k = 0; k <= nbc; k++)
+                {
+                    S = S + " ";
+                }
                 if (i < 10) { S = S + " "; }
             }
-            S = S +"\n";
-        
+            S = S + "\n";
             this.richTextBox1.Text = richTextBox1.Text + S;
-           
-         
-            this.richTextBox1.Clear();
-            this.richTextBox1.Text = richTextBox1.Text + S;
-     
             tablo.iniTabCond();
             tablo.iniTabcf();
             tablo.chargePourTest();
-            int j = 0;           //****************  AFFICHAGE DES conditions
+            int j = 0;
+            //****************  AFFICHAGE DES conditions
             while (tablo.TabCond[j] != null)
             {
                 S = "|";
@@ -66,73 +65,97 @@ namespace WindowsFormsApplication1
                 {
                     if (i < tablo.TabCond[j].conditionOrigine) // inférieur à origine
                     {
-                        S = S + "       |";
+                        for (int k = 0; k <= nbc + 1; k++)
+                        { S = S + " "; }
+                        S = S + "|";
                     }
                     if ((i == tablo.TabCond[j].conditionOrigine) && ((i + 1) == tablo.TabCond[j].conditionExtremite)) //  cond deux surfaces consécutives
                     {
-                        S = S + "O=====>|";
+                        S = S + "O";
+                        for (int k = 0; k <= nbc - 1; k++)
+                        { S = S + "="; }
+                        S = S + ">|";
                     }
                     if ((i == tablo.TabCond[j].conditionOrigine) && ((i + 1) != tablo.TabCond[j].conditionExtremite))    // debut de cond
                     {
-                        S = S + "<=======";
+                        S = S + "<";
+                        for (int k = 0; k <= nbc; k++)
+                        { S = S + "="; }
+                        S = S + "|";
                     }
                     if ((i > tablo.TabCond[j].conditionOrigine) && (i + 1 < tablo.TabCond[j].conditionExtremite)) // en court de cond
                     {
-                        S = S + "========";
+                        for (int k = 0; k <= nbc + 1; k++)
+                        { S = S + "="; }
+                        S = S + "|";
                     }
-                    if ((i == tablo.TabCond[j].conditionExtremite) && (i - 1 != tablo.TabCond[j].conditionOrigine))// fin de cf
+                    if ((i == tablo.TabCond[j].conditionExtremite) && (i - 1 != tablo.TabCond[j].conditionOrigine))// fin de cond
                     {
-                        S = S + "======>|";
+                        for (int k = 0; k <= nbc + 1; k++)
+                        { S = S + "="; }
+                        S = S + "|";
                     }
                     if (i > tablo.TabCf[j].Extremite) // supérieur a extrémité
                     {
-                        S = S + "       |";
+                        for (int k = 0; k <= nbc + 1; k++)
+                        { S = S + " "; }
+                        S = S + "|";
                     }
-                    //  if (i < 9) { S = S + " "; }
                 }
 
-               
-                this.richTextBox1.Text = richTextBox1.Text + S+"    "+ tablo.TabCond[j].condName+ "  (" + tablo.TabCond[j].conditionOrigine + "," + tablo.TabCond[j].conditionExtremite+ ")\n";
-             
-                 j = j + 1;
+                this.richTextBox1.Text = richTextBox1.Text + S + "    " + tablo.TabCond[j].condName + "  (" + tablo.TabCond[j].conditionOrigine + "," + tablo.TabCond[j].conditionExtremite + ")\n";
+                j = j + 1;
             }
-            //=============
             this.richTextBox1.Text = richTextBox1.Text + "\n";
-      
-             j = 0;           //****************  AFFICHAGE DES CF
+            //****************  AFFICHAGE DES CF
             while (tablo.TabCf[j] != null)
-            {                               
-                 S = "|";
+            {
+                S = "|";
                 for (int i = 0; i <= 10; i++)
                 {
                     if (i < tablo.TabCf[j].Origine) // inférieur à origine
                     {
-                    S = S + "       |";
+
+                        for (int k = 0; k <= nbc + 1; k++)
+                        { S = S + " "; }
+                        S = S + "|";
                     }
-                    if ((i == tablo.TabCf[j].Origine)  && ( (i+1)== tablo.TabCf[j].Extremite)) //  cf deux surfaces consécutives
+                    if ((i == tablo.TabCf[j].Origine) && ((i + 1) == tablo.TabCf[j].Extremite)) //  cf deux surfaces consécutives
                     {
-                        S = S + "<----->|";
+                        S = S + "<";
+                        for (int k = 0; k <= nbc - 1; k++)
+                        { S = S + "-"; }
+                        S = S + ">|";
                     }
-                    if ((i == tablo.TabCf[j].Origine)  && ( (i+1)!= tablo.TabCf[j].Extremite) )    // debut de cf
+                    if ((i == tablo.TabCf[j].Origine) && ((i + 1) != tablo.TabCf[j].Extremite))    // debut de cf
                     {
-                        S = S + "<-------";
+                        S = S + "<";
+                        for (int k = 0; k <= nbc; k++)
+                        { S = S + "-"; }
+                        S = S + "|";
                     }
-                     if ((i >tablo.TabCf[j].Origine)  && ( i+1 < tablo.TabCf[j].Extremite)) // en court de cf
+                    if ((i > tablo.TabCf[j].Origine) && (i + 1 < tablo.TabCf[j].Extremite)) // en court de cf
                     {
-                        S = S + "--------";
+                        for (int k = 0; k <= nbc + 1; k++)
+                        { S = S + "-"; }
+                        S = S + "|";
                     }
-                     if  ((i== tablo.TabCf[j].Extremite) &&(i-1!=tablo.TabCf[j].Origine))// fin de cf
+                    if ((i == tablo.TabCf[j].Extremite) && (i - 1 != tablo.TabCf[j].Origine))// fin de cf
                     {
-                        S = S + "------>|";
+                        for (int k = 0; k <= nbc; k++)
+                        { S = S + "-"; }
+                        S = S + ">|";
                     }
-                     if (i > tablo.TabCf[j].Extremite) // supérieur a extrémité
-                     {
-                         S = S + "       |";
-                     }
-                  //  if (i < 9) { S = S + " "; }
-                }               
+                    if (i > tablo.TabCf[j].Extremite) // supérieur a extrémité
+                    {
+                        for (int k = 0; k <= nbc + 1; k++)
+                        { S = S + " "; }
+                        S = S + "|";
+                    }
+
+                }
                 if (tablo.TabCf[j] != null)
-                { S = S +"   " + tablo.TabCf[j].cfname +"  ("+tablo.TabCf[j].Origine+","+ tablo.TabCf[j].Extremite+")\n"; }
+                { S = S + "   " + tablo.TabCf[j].cfname + "  (" + tablo.TabCf[j].Origine + "," + tablo.TabCf[j].Extremite + ")\n"; }
                 else
                 {
                     S = S + "\n";
@@ -152,6 +175,19 @@ namespace WindowsFormsApplication1
         {
             bool result = int.TryParse(s, out i);
             if (result) { result = true; } else { MessageBox.Show(s + " n'est pas un entier"); }
+        }
+
+        private void numericUpDownFont_ValueChanged(object sender, EventArgs e)
+        {
+            t = Convert.ToInt32(this.numericUpDownFont.Value);
+            this.richTextBox1.Font = new Font("Courier New", t, FontStyle.Regular);
+            afficheToutCf(lgc);
+        }
+
+        private void numericUpDownCote_ValueChanged(object sender, EventArgs e)
+        {
+            lgc =Convert.ToInt32( this.numericUpDownCote.Value);
+            afficheToutCf(lgc);
         }
 
     }
