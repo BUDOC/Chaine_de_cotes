@@ -17,8 +17,7 @@ namespace WindowsFormsApplication1
         public cf cf1;
         Tablos tablo = new Tablos();
         int t = 9; //taille caractere du richedit
-        int lgc = 4; // longueur des cote dans le richedit
-
+        int lgc = 4; // longueur des cote dans le richedit        
         public Form1()
         {
             InitializeComponent();
@@ -39,9 +38,19 @@ namespace WindowsFormsApplication1
 
         public void afficheToutCf(int L) //Tableau des cf vide
         {
-            int nbc = L;
+            int nbc = L;          
+            AffHautPage(nbc);
+            tablo.iniTabCond();
+            tablo.iniTabcf();
+            tablo.chargePourTest();           
+            AfficheConditions(nbc);
+            afficheLesCf(nbc);
+        }
+
+        private string AffHautPage(int nbc)
+        {
+            this.richTextBox1.Clear();
             string S = "";
-            this.richTextBox1.Clear();    
             for (int i = 0; i <= 10; i++)  //n identification des surfaces en haut du richtextbox
             {
                 S = S + i.ToString();
@@ -53,64 +62,16 @@ namespace WindowsFormsApplication1
             }
             S = S + "\n";
             this.richTextBox1.Text = richTextBox1.Text + S;
-            tablo.iniTabCond();
-            tablo.iniTabcf();
-            tablo.chargePourTest();
-            int j = 0;
-            //****************  AFFICHAGE DES conditions
-            while (tablo.TabCond[j] != null)
-            {
-                S = "|";
-                for (int i = 0; i <= 11; i++)
-                {
-                    if (i < tablo.TabCond[j].conditionOrigine) // inférieur à origine
-                    {
-                        for (int k = 0; k <= nbc + 1; k++)
-                        { S = S + " "; }
-                        S = S + "|";
-                    }
-                    if ((i == tablo.TabCond[j].conditionOrigine) && ((i + 1) == tablo.TabCond[j].conditionExtremite)) //  cond deux surfaces consécutives
-                    {
-                        S = S + "O";
-                        for (int k = 0; k <= nbc - 1; k++)
-                        { S = S + "="; }
-                        S = S + ">|";
-                    }
-                    if ((i == tablo.TabCond[j].conditionOrigine) && ((i + 1) != tablo.TabCond[j].conditionExtremite))    // debut de cond
-                    {
-                        S = S + "<";
-                        for (int k = 0; k <= nbc; k++)
-                        { S = S + "="; }
-                        S = S + "|";
-                    }
-                    if ((i > tablo.TabCond[j].conditionOrigine) && (i + 1 < tablo.TabCond[j].conditionExtremite)) // en court de cond
-                    {
-                        for (int k = 0; k <= nbc + 1; k++)
-                        { S = S + "="; }
-                        S = S + "|";
-                    }
-                    if ((i == tablo.TabCond[j].conditionExtremite) && (i - 1 != tablo.TabCond[j].conditionOrigine))// fin de cond
-                    {
-                        for (int k = 0; k <= nbc + 1; k++)
-                        { S = S + "="; }
-                        S = S + "|";
-                    }
-                    if (i > tablo.TabCf[j].Extremite) // supérieur a extrémité
-                    {
-                        for (int k = 0; k <= nbc + 1; k++)
-                        { S = S + " "; }
-                        S = S + "|";
-                    }
-                }
+            return S;
+        }
 
-                this.richTextBox1.Text = richTextBox1.Text + S + "    " + tablo.TabCond[j].condName + "  (" + tablo.TabCond[j].conditionOrigine + "," + tablo.TabCond[j].conditionExtremite + ")\n";
-                j = j + 1;
-            }
-            this.richTextBox1.Text = richTextBox1.Text + "\n";
+        private void afficheLesCf(int nbc)
+        {       
+            int j = 0;
             //****************  AFFICHAGE DES CF
             while (tablo.TabCf[j] != null)
             {
-                S = "|";
+              string  S = "|";
                 for (int i = 0; i <= 10; i++)
                 {
                     if (i < tablo.TabCf[j].Origine) // inférieur à origine
@@ -163,6 +124,61 @@ namespace WindowsFormsApplication1
                 j = j + 1;
                 this.richTextBox1.Text = richTextBox1.Text + S;
             }
+        }
+
+        private void AfficheConditions(int nbc)
+        {
+            int j = 0;
+            //****************  AFFICHAGE DES conditions
+            while (tablo.TabCond[j] != null)
+            {
+                string S = "|";
+                for (int i = 0; i <= 11; i++)
+                {
+                    if (i < tablo.TabCond[j].conditionOrigine) // inférieur à origine
+                    {
+                        for (int k = 0; k <= nbc + 1; k++)
+                        { S = S + " "; }
+                        S = S + "|";
+                    }
+                    if ((i == tablo.TabCond[j].conditionOrigine) && ((i + 1) == tablo.TabCond[j].conditionExtremite)) //  cond deux surfaces consécutives
+                    {
+                        S = S + "O";
+                        for (int k = 0; k <= nbc - 1; k++)
+                        { S = S + "="; }
+                        S = S + ">|";
+                    }
+                    if ((i == tablo.TabCond[j].conditionOrigine) && ((i + 1) != tablo.TabCond[j].conditionExtremite))    // debut de cond
+                    {
+                        S = S + "<";
+                        for (int k = 0; k <= nbc; k++)
+                        { S = S + "="; }
+                        S = S + "|";
+                    }
+                    if ((i > tablo.TabCond[j].conditionOrigine) && (i + 1 < tablo.TabCond[j].conditionExtremite)) // en court de cond
+                    {
+                        for (int k = 0; k <= nbc + 1; k++)
+                        { S = S + "="; }
+                        S = S + "|";
+                    }
+                    if ((i == tablo.TabCond[j].conditionExtremite) && (i - 1 != tablo.TabCond[j].conditionOrigine))// fin de cond
+                    {
+                        for (int k = 0; k <= nbc + 1; k++)
+                        { S = S + "="; }
+                        S = S + "|";
+                    }
+                    if (i > tablo.TabCf[j].Extremite) // supérieur a extrémité
+                    {
+                        for (int k = 0; k <= nbc + 1; k++)
+                        { S = S + " "; }
+                        S = S + "|";
+                    }
+                }
+
+                this.richTextBox1.Text = richTextBox1.Text + S + "    " + tablo.TabCond[j].condName + "  (" + tablo.TabCond[j].conditionOrigine + "," + tablo.TabCond[j].conditionExtremite + ")\n";
+                j = j + 1;
+            }
+            this.richTextBox1.Text = richTextBox1.Text + "\n";
         }
         public void infoCond(cond C)
         {
