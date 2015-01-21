@@ -16,6 +16,7 @@ namespace WindowsFormsApplication1
         public cond C1;
         public cf cf1;
         Tablos tablo = new Tablos();
+        Traitement Traite = new Traitement(); 
         int t = 9; //taille caractere du richedit
         int lgc = 4; // longueur des cote dans le richedit        
         public Form1()
@@ -33,6 +34,7 @@ namespace WindowsFormsApplication1
             tablo.iniTabCond();
             tablo.chargePourTest();
             this.afficheToutCf(3);
+            this.Traite.SetValeurTabT(tablo);
         }
 
 
@@ -195,7 +197,7 @@ namespace WindowsFormsApplication1
 
         private void numericUpDownFont_ValueChanged(object sender, EventArgs e)
         {
-            t = Convert.ToInt32(this.numericUpDownFont.Value);
+            t = Convert.ToInt32(this.numericUpDownFont.Value);       
             this.richTextBox1.Font = new Font("Courier New", t, FontStyle.Regular);
             afficheToutCf(lgc);
         }

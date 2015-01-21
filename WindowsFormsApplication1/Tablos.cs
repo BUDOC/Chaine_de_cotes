@@ -36,8 +36,8 @@ namespace WindowsFormsApplication1
             Cx.conditionIT=1f;
             TabCond[0] = Cx;
 
-            cf cf=new cf("cf1",4,5,20.1f,0.2f,0.3f);
-            TabCf[0] = cf;
+            cf cf = new cf("cf1", 4, 5, 20.1f, 0.2f, 0.3f); //(on peut ecrire  TabCf[n] = new cf("cf1", 4, 5, 20.1f, 0.2f, 0.3f)) )
+            TabCf[0] = cf; 
             cf = new cf(); //Création d'un nouveau pointeur pour pouvoir avoir un pointeur différent dans le tableau'
             cf.Name= "cf2"; //====            
             cf.Origine = 1;
