@@ -35,6 +35,7 @@ namespace WindowsFormsApplication1
             tablo.chargePourTest();
             this.afficheToutCf(3);
             this.Traite.SetValeurTabT(tablo);
+     //====================================================================================        
         }
 
 
