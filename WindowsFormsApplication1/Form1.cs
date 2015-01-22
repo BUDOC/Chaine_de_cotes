@@ -34,7 +34,8 @@ namespace WindowsFormsApplication1
             tablo.iniTabCond();
             tablo.chargePourTest();
             this.afficheToutCf(3);
-            this.Traite.SetValeurTabT(tablo);
+            this.Traite.SetValeurTabT(tablo);      
+            this.debug();
      //====================================================================================        
         }
 
@@ -49,7 +50,20 @@ namespace WindowsFormsApplication1
             AfficheConditions(nbc);
             afficheLesCf(nbc);
         }
-
+public void  debug()
+{
+    this.richTextBox1.Clear();
+    string S = "";
+    for (int i = 0; i < 10; i++)  //affiche resultat du tableau de traitement
+    {
+        for (int k = 0; k < 10; k++)
+        {
+            S = S+this.Traite.Tabt[i,k].ToString()+ "  ";
+        }
+        this.richTextBox1.Text = richTextBox1.Text + S+"\n";
+        S = "";
+    }
+}
         private string AffHautPage(int nbc)
         {
             this.richTextBox1.Clear();
