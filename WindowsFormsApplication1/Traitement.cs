@@ -12,6 +12,11 @@ namespace WindowsFormsApplication1
         public int[,] Tabt = new int[10, 10];
         int[,] TabDesNiveaux = new int[10, 15];
         public Tablos tabTT = new Tablos();
+        public int[] origine = new int[10];
+        public int[] extremite = new int[10];
+        public int[] tabcolcf = new int[10];
+        public int nbliTabt  =0;
+        public int nbcoTabt = 0;
 
         public Traitement() //constructeur vide
         {
@@ -19,8 +24,8 @@ namespace WindowsFormsApplication1
 
         public void iniTabT() //Tableau TABT vide
         {
-            int nbliTabt = Tabt.GetUpperBound(0);
-            int nbcoTabt = Tabt.GetUpperBound(1);
+             nbliTabt = Tabt.GetUpperBound(0);
+             nbcoTabt = Tabt.GetUpperBound(1);
             int k = 0;
             for (int ii = 0; ii <= nbliTabt; ii++)
             {
@@ -44,40 +49,80 @@ namespace WindowsFormsApplication1
                     this.TabDesNiveaux[i, j] = -1;
                 }
             }
+
             cherche(3, 4);
         }
-        public void cherche(int o, int e)
+       private void initTabcolcf()
         {
-            bool ok = false;
+          int b = this.tabcolcf.GetUpperBound(0);
+
+            for (int i = 0; i <= b; i++)
+            {
+                this.tabcolcf[i] = -1;
+            }
+        }
+        public bool ok = false;
+        public void cherche(int o, int e) //====================================================================================================
+        {
+             int colScrutte=0;
+            int cpt = 0;
             int nivo = 0;
             int pos = 0;
+            int pos2 = 0;
             int co = this.Tabt.GetUpperBound(1);
             int li = this.Tabt.GetUpperBound(0);
-            for (int i = 0; i < co; i++) // trouve les cf qui sont en realtion avec l'origine de la condition
+            cf Cfr = new cf();
+            Cfr = new cf();
+            initTabcolcf();
+            // a faire tant que l'extremité de la condition n'est pas trouvée dans une borne de cf (OK=true) ou qu'il n'y ait plus de cf à exploiter (pb cotation)
+            for (int i = 0; i < co; i++) // trouve les cf qui sont en relation avec l'origine de la condition
             {
                 if (this.Tabt[o, i] != -1)
                 {
-                    this.TabDesNiveaux[nivo, pos] = Tabt[o, i]; // rentre les cf trouvées dans le tableau des niveau au niveau "nivo"
+                    this.TabDesNiveaux[nivo, pos] = i; // rentre les n° de colonnes trouvées dans le tableau des niveau  "nivo"
                     pos = pos + 1;
-                    if (Tabt[o, i] == e)
+                    this.tabcolcf[pos] = this.Tabt[o, i]; // rente les n°  cf est trouvée
+                    if (this.tabTT.TabCf[this.Tabt[o, i]].Extremite == e || this.tabTT.TabCf[this.Tabt[o, i]].Origine == e) // Un lien avec l'extrémité de condition est trouvé : la chaine est bouclée
                     {
                         ok = true;
                     }
+                    this.Tabt[o, i] = -1; // efface les cf trouvées sur la ligne ainsi que leurs symétrique par rapport à la diagonale *********
+                    this.Tabt[i, o] = -1;
                 }
             }
-            // efface les cf trouvées sur la ligne ainsi que leurs symétrique par rapport à la diagonale *********
-            cf Cfr = new cf();
-            Cfr = new cf();
-            for (int i2 = 0; i2 <pos; i2++)
+
+            pos2 = 0;
+            nivo = nivo + 1;
+            initTabcolcf();   // a remplacer par un while ! -1
+          
+            while (this.TabDesNiveaux[nivo-1,cpt]!=-1)
             {
-               // retrouve la position de la cf par son origine et son extrémité              
-                Cfr = this.tabTT.TabCf[this.TabDesNiveaux[nivo,i2]];
-                o = Cfr.Origine;
-                e = Cfr.Extremite;
-                Tabt[o,e]=-1;
-                Tabt[e, o] = -1;
+                
+         
+           
+                 colScrutte = this.TabDesNiveaux[nivo - 1, cpt];
+
+                 for (int i4 = 0; i4 <= this.nbliTabt ; i4++)
+			{
+			 
+		
+                    if (this.Tabt[i4, cpt] != -1)
+                    {
+                        this.TabDesNiveaux[nivo, pos2] = i4;//  rentre les n° de lignes trouvées dans le tableau des niveau  "nivo"                      
+                        this.tabcolcf[pos2] = this.Tabt[i4, cpt]; // rente les n°  cf est trouvée
+                        pos2 = pos2 + 1;
+                        if (this.tabTT.TabCf[this.Tabt[i4, cpt]].Extremite == e || this.tabTT.TabCf[this.Tabt[i4, cpt]].Origine == e) // Un lien avec l'extrémité de condition est trouvé : la chaine est bouclée
+                        {
+                            ok = true;
+                        }
+                        this.Tabt[i4, cpt] = -1; // efface les cf trouvées sur la ligne ainsi que leurs symétrique par rapport à la diagonale *********
+                        this.Tabt[cpt, i4] = -1;
+                    }
+                }
+            cpt=cpt+1;
             }
         }
+
         public void SetValeurTabT(Tablos TT) // recupere valeur des conditions et cf
         {
             this.tabTT = TT;
