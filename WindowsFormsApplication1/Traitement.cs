@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Windows.Forms; // ajouté pour avoir acces à MessageBox
+
 
 namespace WindowsFormsApplication1
 {
@@ -15,7 +18,7 @@ namespace WindowsFormsApplication1
         public int[] origine = new int[10];
         public int[] extremite = new int[10];
         public int[] tabcolcf = new int[10];
-        public int nbliTabt  =0;
+        public int nbliTabt = 0;
         public int nbcoTabt = 0;
         public bool ferme = true;
 
@@ -23,10 +26,38 @@ namespace WindowsFormsApplication1
         {
         }
 
+        public void ecritResult() // stocke les résulats dans un fichier texte
+        {
+            string blancs = " ";
+                 string nomfic = "H:\\tempo\\Texte.txt";
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(nomfic)) //sans @ =fichier dans répertoire courant                        
+                {                    
+                    string line = "";
+                    for (int j = 0; j < 10; j++)
+                    {
+                        for (int i = 0; i < 10; i++)
+                        {
+                            if (this.Tabt[j, i]<0)
+                            {
+                                blancs = "  ";
+                            }
+                            else
+                            {
+                                blancs = "   ";
+                            }
+                            line = line + blancs + this.Tabt[j, i].ToString("0.");
+                        }
+                        line = line + "\n";
+                        file.WriteLine(line);
+                        line = "";
+                    }
+                    
+                }                          
+        }
         public void iniTabT() //Tableau TABT vide
         {
-             nbliTabt = Tabt.GetUpperBound(0);
-             nbcoTabt = Tabt.GetUpperBound(1);
+            nbliTabt = Tabt.GetUpperBound(0);
+            nbcoTabt = Tabt.GetUpperBound(1);
             int k = 0;
             for (int ii = 0; ii <= nbliTabt; ii++)
             {
@@ -53,10 +84,9 @@ namespace WindowsFormsApplication1
 
             cherche(3, 4);
         }
-       private void initTabcolcf()
+        private void initTabcolcf()
         {
-          int b = this.tabcolcf.GetUpperBound(0);
-
+            int b = this.tabcolcf.GetUpperBound(0);
             for (int i = 0; i <= b; i++)
             {
                 this.tabcolcf[i] = -1;
@@ -65,8 +95,8 @@ namespace WindowsFormsApplication1
         public bool ok = false;
         public void cherche(int o, int e) //====================================================================================================
         {
-             int colScrutte=0;
-             int ligneScrute = 0;
+            int colScrutte = 0;
+            int ligneScrute = 0;
             int cpt = 0;
             int nivo = 0;
             int pos = 0;
@@ -76,18 +106,22 @@ namespace WindowsFormsApplication1
             cf Cfr = new cf();
             Cfr = new cf();
             // a faire tant que l'extremité de la condition n'est pas trouvée dans une borne de cf (OK=true) ou qu'il n'y ait plus de cf à exploiter (pb cotation)
-            initTabcolcf();
             pos = PremiereLigne(o, e, nivo, pos, co);
-          
-            pos2 = 0;
-            nivo = nivo + 1;
-            initTabcolcf();
-            cpt = 0;        
-            Colonnes(e, ref colScrutte, ref cpt, nivo, ref pos2);
-            nivo = nivo + 1;
-            //lignes suivantes
-            AutreLigne(e, ref ligneScrute, ref cpt, nivo, pos, ref pos2);
+            //tester si ok = TRUE
+            while (this.ok == false || this.ferme == false)
+            {
+                initTabcolcf();            
+                pos2 = 0;
+                nivo = nivo + 1;
+                initTabcolcf();
+                cpt = 0;
+                Colonnes(e, ref colScrutte, ref cpt, nivo, ref pos2);
+                nivo = nivo + 1;
+                //lignes suivantes
+                AutreLigne(e, ref ligneScrute, ref cpt, nivo, pos, ref pos2);
+            }
         }
+
 
         private void AutreLigne(int e, ref int ligneScrute, ref int cpt, int nivo, int pos, ref int pos2)
         {
@@ -140,16 +174,15 @@ namespace WindowsFormsApplication1
                 }
                 cpt = cpt + 1;
             }
-            if (pos2==0) //plus de cotes donc il y a une erreur sur les données d'entrées : la chaine ne peut pas fermer
+            if (pos2 == 0) //plus de cotes donc il y a une erreur sur les données d'entrées : la chaine ne peut pas fermer
             {
                 this.ferme = false;
             }
-       
         }
 
         private int PremiereLigne(int o, int e, int nivo, int pos, int co)
         {
-           
+            ecritResult();
             for (int i = 0; i < co; i++) // trouve les cf qui sont en relation avec l'origine de la condition
             {
                 if (this.Tabt[o, i] != -1)
@@ -160,6 +193,7 @@ namespace WindowsFormsApplication1
                     if (this.tabTT.TabCf[this.Tabt[o, i]].Extremite == e || this.tabTT.TabCf[this.Tabt[o, i]].Origine == e) // Un lien avec l'extrémité de condition est trouvé : la chaine est bouclée
                     {
                         ok = true;
+                    
                     }
                     this.Tabt[o, i] = -1; // efface les cf trouvées sur la ligne ainsi que leurs symétrique par rapport à la diagonale *********
                     this.Tabt[i, o] = -1;

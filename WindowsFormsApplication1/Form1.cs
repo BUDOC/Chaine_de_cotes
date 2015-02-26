@@ -52,7 +52,7 @@ namespace WindowsFormsApplication1
         }
 public void  debug()
 {
-    this.richTextBox1.Clear();
+  //  this.richTextBox1.Clear();
     string S = "";
     for (int i = 0; i < 10; i++)  //affiche resultat du tableau de traitement
     {
