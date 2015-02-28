@@ -21,18 +21,19 @@ namespace WindowsFormsApplication1
         public int nbliTabt = 0;
         public int nbcoTabt = 0;
         public bool ferme = true;
-
+ string nomfic = "Texte.txt";
         public Traitement() //constructeur vide
         {
         }
-
-        public void ecritResult() // stocke les résulats dans un fichier texte
+       
+        public void ecritResult(string info) // stocke les résulats dans un fichier texte
         {
             string blancs = " ";
-                 string nomfic = "H:\\tempo\\Texte.txt";
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(nomfic)) //sans @ =fichier dans répertoire courant                        
+          //  string nomfic = "Texte.txt";
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(nomfic,true)) //sans @ =fichier dans répertoire courant                        
                 {                    
                     string line = "";
+                    file.WriteLine("Tableau Tabt  "+info);
                     for (int j = 0; j < 10; j++)
                     {
                         for (int i = 0; i < 10; i++)
@@ -46,6 +47,25 @@ namespace WindowsFormsApplication1
                                 blancs = "   ";
                             }
                             line = line + blancs + this.Tabt[j, i].ToString("0.");
+                        }
+                        line = line + "\n";
+                        file.WriteLine(line);
+                        line = "";
+                    }
+                    file.WriteLine("Tableau TabDEsNiveaux");
+                    for (int j = 0; j < 10; j++)
+                    {
+                        for (int i = 0; i < 15; i++)
+                        {
+                            if (this.TabDesNiveaux[j, i] < 0)
+                            {
+                                blancs = "  ";
+                            }
+                            else
+                            {
+                                blancs = "   ";
+                            }
+                            line = line + blancs + this.TabDesNiveaux[j, i].ToString("0.");
                         }
                         line = line + "\n";
                         file.WriteLine(line);
@@ -81,7 +101,7 @@ namespace WindowsFormsApplication1
                     this.TabDesNiveaux[i, j] = -1;
                 }
             }
-
+            MessageBox.Show("Init tableau OK et recherche couple 3 4");
             cherche(3, 4);
         }
         private void initTabcolcf()
@@ -108,6 +128,7 @@ namespace WindowsFormsApplication1
             // a faire tant que l'extremité de la condition n'est pas trouvée dans une borne de cf (OK=true) ou qu'il n'y ait plus de cf à exploiter (pb cotation)
             pos = PremiereLigne(o, e, nivo, pos, co);
             //tester si ok = TRUE
+         
             while (this.ok == false || this.ferme == false)
             {
                 initTabcolcf();            
@@ -122,10 +143,12 @@ namespace WindowsFormsApplication1
             }
         }
 
-
+        public int passage = 0;
         private void AutreLigne(int e, ref int ligneScrute, ref int cpt, int nivo, int pos, ref int pos2)
         {
+            passage = passage + 1;
             cpt = 0;
+           // MessageBox.Show("entrée Autre ligne   Passage="+passage.ToString());
             while (this.TabDesNiveaux[nivo - 1, cpt] != -1)
             {
                 ligneScrute = this.TabDesNiveaux[nivo - 1, cpt];
@@ -150,10 +173,13 @@ namespace WindowsFormsApplication1
             {
                 this.ferme = false;
             }
+            ecritResult( "Autre ligne Passage : "+passage.ToString());
+         //   MessageBox.Show("Sortie Autre ligne ");
         }
 
         private void Colonnes(int e, ref int colScrutte, ref int cpt, int nivo, ref int pos2)
         {
+           // MessageBox.Show("entrée Colonnes");
             while (this.TabDesNiveaux[nivo - 1, cpt] != -1)
             {
                 colScrutte = this.TabDesNiveaux[nivo - 1, cpt];
@@ -178,11 +204,15 @@ namespace WindowsFormsApplication1
             {
                 this.ferme = false;
             }
+            ecritResult("Colonnes");
+          //  MessageBox.Show("Sortie colonnes");
+
         }
 
         private int PremiereLigne(int o, int e, int nivo, int pos, int co)
         {
-            ecritResult();
+           // MessageBox.Show("entrée Premiere ligne");
+            ecritResult("Avant traitement");
             for (int i = 0; i < co; i++) // trouve les cf qui sont en relation avec l'origine de la condition
             {
                 if (this.Tabt[o, i] != -1)
@@ -199,6 +229,8 @@ namespace WindowsFormsApplication1
                     this.Tabt[i, o] = -1;
                 }
             }
+          //  MessageBox.Show("Sortie Premiere ligne");
+            ecritResult("Première ligne");
             return pos;
         }
 

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 
 namespace WindowsFormsApplication1
@@ -36,6 +37,11 @@ namespace WindowsFormsApplication1
             this.afficheToutCf(3);
             this.Traite.SetValeurTabT(tablo);      
             this.debug();
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter("texte.txt", true)) //sans @ =fichier dans répertoire courant                        
+            {
+                if (File.Exists("Texte.txt"))    { System.IO.Directory.Delete("Texte.txt");}
+            }
+
      //====================================================================================        
         }
 
