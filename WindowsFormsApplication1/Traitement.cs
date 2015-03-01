@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Windows.Forms; // ajouté pour avoir acces à MessageBox
+using System.IO;
 
 
 namespace WindowsFormsApplication1
@@ -21,21 +22,24 @@ namespace WindowsFormsApplication1
         public int nbliTabt = 0;
         public int nbcoTabt = 0;
         public bool ferme = true;
- string nomfic = "Texte.txt";
+        string nomfic = "Texte.txt";
+        string rep = "";
         public Traitement() //constructeur vide
         {
         }
        
         public void ecritResult(string info) // stocke les résulats dans un fichier texte
         {
-            string blancs = " ";
-          //  string nomfic = "Texte.txt";
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(nomfic,true)) //sans @ =fichier dans répertoire courant                        
+            string blancs = " ";      
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(nomfic,true))                      
                 {                    
                     string line = "";
-                    file.WriteLine("Tableau Tabt  "+info);
+                    file.WriteLine("Tableau Tabt   (V3) "+info);
+                    file.WriteLine("      0   1   2   3   4   5   6   7   8   9\n\n");
+
                     for (int j = 0; j < 10; j++)
                     {
+                        line = j+"  ";
                         for (int i = 0; i < 10; i++)
                         {
                             if (this.Tabt[j, i]<0)
@@ -94,6 +98,19 @@ namespace WindowsFormsApplication1
                 this.Tabt[this.tabTT.TabCf[k].Extremite, this.tabTT.TabCf[k].Origine] = k;
                 k = k + 1;
             }
+            // dans fichier de debog            
+            if (File.Exists(nomfic))
+            {
+                File.Delete(nomfic);
+            }
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(nomfic, true))                       
+            {
+                for (int i2 = 0; i2 < k; i2++)
+                {
+                    file.WriteLine("cf( "+i2.ToString()+" )= [ "+tabTT.TabCf[i2].Origine.ToString()+ ", "+tabTT.TabCf[i2].Extremite.ToString()+"]\n");   
+                }
+            }
+            //======================
             for (int i = 0; i <= nblTabNiv; i++) // initialise le tableau des niveaux
             {
                 for (int j = 0; j <= nbcoTabNinv; j++)
@@ -112,7 +129,13 @@ namespace WindowsFormsApplication1
                 this.tabcolcf[i] = -1;
             }
         }
+
         public bool ok = false;
+
+        public void enteteDebog()
+        {                 
+
+        }
         public void cherche(int o, int e) //====================================================================================================
         {
             int colScrutte = 0;
@@ -125,6 +148,12 @@ namespace WindowsFormsApplication1
             int li = this.Tabt.GetUpperBound(0);
             cf Cfr = new cf();
             Cfr = new cf();
+            // ** suprime fichier deboggage si existe
+            rep = Application.StartupPath;
+            nomfic = rep + "\\" + nomfic;
+  
+           
+
             // a faire tant que l'extremité de la condition n'est pas trouvée dans une borne de cf (OK=true) ou qu'il n'y ait plus de cf à exploiter (pb cotation)
             pos = PremiereLigne(o, e, nivo, pos, co);
             //tester si ok = TRUE
@@ -144,6 +173,7 @@ namespace WindowsFormsApplication1
         }
 
         public int passage = 0;
+
         private void AutreLigne(int e, ref int ligneScrute, ref int cpt, int nivo, int pos, ref int pos2)
         {
             passage = passage + 1;
@@ -209,14 +239,14 @@ namespace WindowsFormsApplication1
 
         }
 
-        private int PremiereLigne(int o, int e, int nivo, int pos, int co)
-        {
-           // MessageBox.Show("entrée Premiere ligne");
-            ecritResult("Avant traitement");
+        private int PremiereLigne(int o, int e, int nivo, int pos, int co) //(ligne d'origine de la condition )
+        {          
+            ecritResult("Avant traitement"); // ATTENTION ALGORYTHME => A FAIRE POUR CHAQUE LIGNE TANT QUE l'ORIGINE N'EST PAS TROUVEE
             for (int i = 0; i < co; i++) // trouve les cf qui sont en relation avec l'origine de la condition
-            {
+            {              
                 if (this.Tabt[o, i] != -1)
                 {
+                    MessageBox.Show("origine trouvée en à la colonne "+i+" niveau " + nivo);
                     this.TabDesNiveaux[nivo, pos] = i; // rentre les n° de colonnes trouvées dans le tableau des niveau  "nivo"
                     pos = pos + 1;
                     this.tabcolcf[pos] = this.Tabt[o, i]; // rente les n°  cf est trouvée
@@ -230,7 +260,7 @@ namespace WindowsFormsApplication1
                 }
             }
           //  MessageBox.Show("Sortie Premiere ligne");
-            ecritResult("Première ligne");
+            ecritResult("TRAITEMENT Première ligne ca d  ligne n°"+o);
             return pos;
         }
 

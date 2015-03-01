@@ -137,8 +137,9 @@
             this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFont)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCote)).EndInit();
+      //    this.Load += new System.EventHandler(this.Form1_Load);
+           ((System.ComponentModel.ISupportInitialize)(this.numericUpDownFont)).EndInit();
+          ((System.ComponentModel.ISupportInitialize)(this.numericUpDownCote)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

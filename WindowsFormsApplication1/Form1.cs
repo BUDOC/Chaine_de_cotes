@@ -36,11 +36,7 @@ namespace WindowsFormsApplication1
             tablo.chargePourTest();
             this.afficheToutCf(3);
             this.Traite.SetValeurTabT(tablo);      
-            this.debug();
-            using (System.IO.StreamWriter file = new System.IO.StreamWriter("texte.txt", true)) //sans @ =fichier dans répertoire courant                        
-            {
-                if (File.Exists("Texte.txt"))    { System.IO.Directory.Delete("Texte.txt");}
-            }
+            this.debug();            
 
      //====================================================================================        
         }
@@ -228,6 +224,7 @@ public void  debug()
             lgc =Convert.ToInt32( this.numericUpDownCote.Value);
             afficheToutCf(lgc);
         }
+
 
     }
 }
