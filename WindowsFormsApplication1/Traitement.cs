@@ -34,7 +34,7 @@ namespace WindowsFormsApplication1
                 using (System.IO.StreamWriter file = new System.IO.StreamWriter(nomfic,true))                      
                 {                    
                     string line = "";
-                    file.WriteLine("Tableau Tabt   (V3) "+info);
+                    file.WriteLine("Tableau Tabt   "+info);
                     file.WriteLine("      0   1   2   3   4   5   6   7   8   9\n\n");
 
                     for (int j = 0; j < 10; j++)
@@ -57,6 +57,7 @@ namespace WindowsFormsApplication1
                         line = "";
                     }
                     file.WriteLine("Tableau TabDEsNiveaux");
+                    file.WriteLine("   0   1   2   3   4   5   6   7   8   9\n\n");
                     for (int j = 0; j < 10; j++)
                     {
                         for (int i = 0; i < 15; i++)
@@ -131,11 +132,8 @@ namespace WindowsFormsApplication1
         }
 
         public bool ok = false;
-
-        public void enteteDebog()
-        {                 
-
-        }
+                           
+      
         public void cherche(int o, int e) //====================================================================================================
         {
             int colScrutte = 0;
@@ -151,21 +149,26 @@ namespace WindowsFormsApplication1
             // ** suprime fichier deboggage si existe
             rep = Application.StartupPath;
             nomfic = rep + "\\" + nomfic;
-  
-           
+             
 
             // a faire tant que l'extremité de la condition n'est pas trouvée dans une borne de cf (OK=true) ou qu'il n'y ait plus de cf à exploiter (pb cotation)
             pos = PremiereLigne(o, e, nivo, pos, co);
             //tester si ok = TRUE
-         
+            if (ok)
+            {
+                MessageBox.Show("Fin de la chaine de cote trouvée");
+            }
             while (this.ok == false || this.ferme == false)
             {
-                initTabcolcf();            
+                initTabcolcf();
                 pos2 = 0;
                 nivo = nivo + 1;
+                MessageBox.Show("nivo incrementé =" + nivo);
                 initTabcolcf();
                 cpt = 0;
                 Colonnes(e, ref colScrutte, ref cpt, nivo, ref pos2);
+                ecritResult("sortie de colonnes");
+                MessageBox.Show("sortie de colonnes");
                 nivo = nivo + 1;
                 //lignes suivantes
                 AutreLigne(e, ref ligneScrute, ref cpt, nivo, pos, ref pos2);
@@ -210,6 +213,7 @@ namespace WindowsFormsApplication1
         private void Colonnes(int e, ref int colScrutte, ref int cpt, int nivo, ref int pos2)
         {
            // MessageBox.Show("entrée Colonnes");
+            cpt = 0;
             while (this.TabDesNiveaux[nivo - 1, cpt] != -1)
             {
                 colScrutte = this.TabDesNiveaux[nivo - 1, cpt];
@@ -217,7 +221,7 @@ namespace WindowsFormsApplication1
                 {
                     if (this.Tabt[i4, cpt] != -1)
                     {
-                        this.TabDesNiveaux[nivo, pos2] = i4;//  rentre les n° de lignes trouvées dans le tableau des niveau  "nivo"                      
+                        this.TabDesNiveaux[nivo, pos2] = i4;//  rentre les n° de lignes trouvées dans le tableau des niveaux                  
                         this.tabcolcf[pos2] = this.Tabt[i4, cpt]; // rente les n°  cf est trouvée
                         pos2 = pos2 + 1;
                         if (this.tabTT.TabCf[this.Tabt[i4, cpt]].Extremite == e || this.tabTT.TabCf[this.Tabt[i4, cpt]].Origine == e) // Un lien avec l'extrémité de condition est trouvé : la chaine est bouclée
@@ -234,7 +238,7 @@ namespace WindowsFormsApplication1
             {
                 this.ferme = false;
             }
-            ecritResult("Colonnes");
+            ecritResult("  Colonnes  nivo="+nivo);
           //  MessageBox.Show("Sortie colonnes");
 
         }
@@ -242,25 +246,34 @@ namespace WindowsFormsApplication1
         private int PremiereLigne(int o, int e, int nivo, int pos, int co) //(ligne d'origine de la condition )
         {          
             ecritResult("Avant traitement"); // ATTENTION ALGORYTHME => A FAIRE POUR CHAQUE LIGNE TANT QUE l'ORIGINE N'EST PAS TROUVEE
-            for (int i = 0; i < co; i++) // trouve les cf qui sont en relation avec l'origine de la condition
-            {              
-                if (this.Tabt[o, i] != -1)
+            int K = 0;
+            bool trouve = false;
+            MessageBox.Show("On cherche la première ligne une cf qui contient l'origine " + o);//##############################################
+            while (trouve == false)
+            {
+                for (int i = 0; i < co; i++) // trouve les cf qui sont en relation avec l'origine de la condition
                 {
-                    MessageBox.Show("origine trouvée en à la colonne "+i+" niveau " + nivo);
-                    this.TabDesNiveaux[nivo, pos] = i; // rentre les n° de colonnes trouvées dans le tableau des niveau  "nivo"
-                    pos = pos + 1;
-                    this.tabcolcf[pos] = this.Tabt[o, i]; // rente les n°  cf est trouvée
-                    if (this.tabTT.TabCf[this.Tabt[o, i]].Extremite == e || this.tabTT.TabCf[this.Tabt[o, i]].Origine == e) // Un lien avec l'extrémité de condition est trouvé : la chaine est bouclée
+
+                    if (this.Tabt[i, K] == o)
                     {
-                        ok = true;
-                    
+                        MessageBox.Show("origine "+ o+" trouvée  à la ligne "+K+"  colonne " + i + "  =>niveau " + nivo);
+                        trouve = true;
+                        this.TabDesNiveaux[nivo, pos] = i; // rentre les n° de colonnes trouvées dans le tableau des niveau  "nivo"                     
+                        pos = pos + 1;
+                        this.tabcolcf[pos] = this.Tabt[o, i]; // rente les n°  cf est trouvée
+                        if (this.tabTT.TabCf[this.Tabt[o, i]].Extremite == e || this.tabTT.TabCf[this.Tabt[o, i]].Origine == e) // Un lien avec l'extrémité de condition est trouvé : la chaine est bouclée
+                        {
+                            ok = true;
+
+                        }
+                        this.Tabt[K, i] = -1; // efface les cf trouvées sur la ligne ainsi que leurs symétrique par rapport à la diagonale *********
+                        this.Tabt[i, K] = -1;
                     }
-                    this.Tabt[o, i] = -1; // efface les cf trouvées sur la ligne ainsi que leurs symétrique par rapport à la diagonale *********
-                    this.Tabt[i, o] = -1;
                 }
+                K = K + 1;
             }
           //  MessageBox.Show("Sortie Premiere ligne");
-            ecritResult("TRAITEMENT Première ligne ca d  ligne n°"+o);
+            ecritResult("TRAITEMENT Première ligne à trouver nivo="+nivo);
             return pos;
         }
 
