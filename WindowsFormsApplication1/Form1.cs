@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+using System;
 using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
 using System.Windows.Forms;
-using System.IO;
-
 
 namespace WindowsFormsApplication1
 {
     public partial class Form1 : Form
     {
-        public cond C1;
-        public cf cf1;
+        public Cond C1;
+        public Cf cf1;
         Tablos tablo = new Tablos();
-        Traitement Traite = new Traitement(); 
-        int t = 9; //taille caractere du richedit
-        int lgc = 4; // longueur des cote dans le richedit        
+        Traitement Traite = new Traitement();
+        int t = 9; // taille caractere du richedit
+        int lgc = 4; // longueur des cote dans le richedit
+
         public Form1()
         {
             InitializeComponent();
@@ -27,206 +21,200 @@ namespace WindowsFormsApplication1
 
         private void button1_Click(object sender, EventArgs e)
         {
-            C1 = new cond("C1", 2, 0, 50.2f, 1.3f);    //cond (string n, int o, int e,double cmoy,double IT, bool vu) 
-            cf1 = new cf("cf1", 5, 4, 20.1f, 0.2f, 0.3f);
-            // cf (string nom, int cfO, int cfE, float cmoy, float IT, float DlO, float DlE, bool vu) // constructeur Cf
-            //  infoCond(C1);
+            C1 = new Cond("C1", 2, 0, 50.2f, 1.3f);
+            cf1 = new Cf("cf1", 5, 4, 20.1f, 0.2f, 0.3f);
+
             tablo.iniTabcf();
             tablo.iniTabCond();
             tablo.chargePourTest();
-            this.afficheToutCf(3);
-            this.Traite.SetValeurTabT(tablo);      
-            this.debug();            
 
-     //====================================================================================        
+            afficheToutCf(3);
+            Traite.SetValeurTabT(tablo);
+            debug();
         }
 
-
-        public void afficheToutCf(int L) //Tableau des cf vide
+        public void afficheToutCf(int L)
         {
-            int nbc = L;          
+            int nbc = L;
             AffHautPage(nbc);
             tablo.iniTabCond();
             tablo.iniTabcf();
-            tablo.chargePourTest();           
+            tablo.chargePourTest();
             AfficheConditions(nbc);
             afficheLesCf(nbc);
         }
-public void  debug()
-{
-  //  this.richTextBox1.Clear();
-    string S = "";
-    for (int i = 0; i < 10; i++)  //affiche resultat du tableau de traitement
-    {
-        for (int k = 0; k < 10; k++)
+
+        public void debug()
         {
-            S = S+this.Traite.Tabt[i,k].ToString()+ "  ";
+            var sb = new StringBuilder();
+            for (int i = 0; i < 10; i++)
+            {
+                for (int k = 0; k < 10; k++)
+                {
+                    sb.Append(Traite.Tabt[i, k].ToString()).Append("  ");
+                }
+                sb.AppendLine();
+            }
+            richTextBox1.Text = sb.ToString();
         }
-        this.richTextBox1.Text = richTextBox1.Text + S+"\n";
-        S = "";
-    }
-}
+
         private string AffHautPage(int nbc)
         {
-            this.richTextBox1.Clear();
-            string S = "";
-            for (int i = 0; i <= 10; i++)  //n identification des surfaces en haut du richtextbox
+            richTextBox1.Clear();
+            var sb = new StringBuilder();
+            for (int i = 0; i <= 10; i++)
             {
-                S = S + i.ToString();
+                sb.Append(i.ToString());
                 for (int k = 0; k <= nbc; k++)
                 {
-                    S = S + " ";
+                    sb.Append(' ');
                 }
-                if (i < 10) { S = S + " "; }
+                if (i < 10) sb.Append(' ');
             }
-            S = S + "\n";
-            this.richTextBox1.Text = richTextBox1.Text + S;
-            return S;
+            sb.AppendLine();
+            richTextBox1.Text = sb.ToString();
+            return sb.ToString();
         }
 
         private void afficheLesCf(int nbc)
-        {       
+        {
             int j = 0;
-            //****************  AFFICHAGE DES CF
             while (tablo.TabCf[j] != null)
             {
-              string  S = "|";
+                var sb = new StringBuilder();
+                sb.Append('|');
                 for (int i = 0; i <= 10; i++)
                 {
-                    if (i < tablo.TabCf[j].Origine) // inférieur à origine
+                    var cf = tablo.TabCf[j];
+                    if (i < cf.Origine)
                     {
-
-                        for (int k = 0; k <= nbc + 1; k++)
-                        { S = S + " "; }
-                        S = S + "|";
+                        for (int k = 0; k <= nbc + 1; k++) sb.Append(' ');
+                        sb.Append('|');
+                        continue;
                     }
-                    if ((i == tablo.TabCf[j].Origine) && ((i + 1) == tablo.TabCf[j].Extremite)) //  cf deux surfaces consécutives
+                    if ((i == cf.Origine) && ((i + 1) == cf.Extremite))
                     {
-                        S = S + "<";
-                        for (int k = 0; k <= nbc - 1; k++)
-                        { S = S + "-"; }
-                        S = S + ">|";
+                        sb.Append('<');
+                        for (int k = 0; k <= nbc - 1; k++) sb.Append('-');
+                        sb.Append(">");
+                        sb.Append('|');
+                        continue;
                     }
-                    if ((i == tablo.TabCf[j].Origine) && ((i + 1) != tablo.TabCf[j].Extremite))    // debut de cf
+                    if ((i == cf.Origine) && ((i + 1) != cf.Extremite))
                     {
-                        S = S + "<";
-                        for (int k = 0; k <= nbc; k++)
-                        { S = S + "-"; }
-                        S = S + "|";
+                        sb.Append('<');
+                        for (int k = 0; k <= nbc; k++) sb.Append('-');
+                        sb.Append('|');
+                        continue;
                     }
-                    if ((i > tablo.TabCf[j].Origine) && (i + 1 < tablo.TabCf[j].Extremite)) // en court de cf
+                    if ((i > cf.Origine) && (i + 1 < cf.Extremite))
                     {
-                        for (int k = 0; k <= nbc + 1; k++)
-                        { S = S + "-"; }
-                        S = S + "|";
+                        for (int k = 0; k <= nbc + 1; k++) sb.Append('-');
+                        sb.Append('|');
+                        continue;
                     }
-                    if ((i == tablo.TabCf[j].Extremite) && (i - 1 != tablo.TabCf[j].Origine))// fin de cf
+                    if ((i == cf.Extremite) && (i - 1 != cf.Origine))
                     {
-                        for (int k = 0; k <= nbc; k++)
-                        { S = S + "-"; }
-                        S = S + ">|";
+                        for (int k = 0; k <= nbc; k++) sb.Append('-');
+                        sb.Append(">");
+                        sb.Append('|');
+                        continue;
                     }
-                    if (i > tablo.TabCf[j].Extremite) // supérieur a extrémité
+                    if (i > cf.Extremite)
                     {
-                        for (int k = 0; k <= nbc + 1; k++)
-                        { S = S + " "; }
-                        S = S + "|";
+                        for (int k = 0; k <= nbc + 1; k++) sb.Append(' ');
+                        sb.Append('|');
+                        continue;
                     }
-
                 }
-                if (tablo.TabCf[j] != null)
-                { S = S + "   " + tablo.TabCf[j].cfname + "  (" + tablo.TabCf[j].Origine + "," + tablo.TabCf[j].Extremite + ")\n"; }
-                else
-                {
-                    S = S + "\n";
-                }
-                j = j + 1;
-                this.richTextBox1.Text = richTextBox1.Text + S;
+                sb.Append("   ").Append(tablo.TabCf[j].Name).Append("  (").Append(tablo.TabCf[j].Origine).Append(",").Append(tablo.TabCf[j].Extremite).Append(")\n");
+                j++;
+                richTextBox1.AppendText(sb.ToString());
             }
         }
 
         private void AfficheConditions(int nbc)
         {
             int j = 0;
-            //****************  AFFICHAGE DES conditions
             while (tablo.TabCond[j] != null)
             {
-                string S = "|";
+                var sb = new StringBuilder();
+                sb.Append('|');
                 for (int i = 0; i <= 11; i++)
                 {
-                    if (i < tablo.TabCond[j].conditionOrigine) // inférieur à origine
+                    var cond = tablo.TabCond[j];
+                    if (i < cond.Origine)
                     {
-                        for (int k = 0; k <= nbc + 1; k++)
-                        { S = S + " "; }
-                        S = S + "|";
+                        for (int k = 0; k <= nbc + 1; k++) sb.Append(' ');
+                        sb.Append('|');
+                        continue;
                     }
-                    if ((i == tablo.TabCond[j].conditionOrigine) && ((i + 1) == tablo.TabCond[j].conditionExtremite)) //  cond deux surfaces consécutives
+                    if ((i == cond.Origine) && ((i + 1) == cond.Extremite))
                     {
-                        S = S + "O";
-                        for (int k = 0; k <= nbc - 1; k++)
-                        { S = S + "="; }
-                        S = S + ">|";
+                        sb.Append('O');
+                        for (int k = 0; k <= nbc - 1; k++) sb.Append('=');
+                        sb.Append(">");
+                        sb.Append('|');
+                        continue;
                     }
-                    if ((i == tablo.TabCond[j].conditionOrigine) && ((i + 1) != tablo.TabCond[j].conditionExtremite))    // debut de cond
+                    if ((i == cond.Origine) && ((i + 1) != cond.Extremite))
                     {
-                        S = S + "<";
-                        for (int k = 0; k <= nbc; k++)
-                        { S = S + "="; }
-                        S = S + "|";
+                        sb.Append('<');
+                        for (int k = 0; k <= nbc; k++) sb.Append('=');
+                        sb.Append('|');
+                        continue;
                     }
-                    if ((i > tablo.TabCond[j].conditionOrigine) && (i + 1 < tablo.TabCond[j].conditionExtremite)) // en court de cond
+                    if ((i > cond.Origine) && (i + 1 < cond.Extremite))
                     {
-                        for (int k = 0; k <= nbc + 1; k++)
-                        { S = S + "="; }
-                        S = S + "|";
+                        for (int k = 0; k <= nbc + 1; k++) sb.Append('=');
+                        sb.Append('|');
+                        continue;
                     }
-                    if ((i == tablo.TabCond[j].conditionExtremite) && (i - 1 != tablo.TabCond[j].conditionOrigine))// fin de cond
+                    if ((i == cond.Extremite) && (i - 1 != cond.Origine))
                     {
-                        for (int k = 0; k <= nbc + 1; k++)
-                        { S = S + "="; }
-                        S = S + "|";
+                        for (int k = 0; k <= nbc + 1; k++) sb.Append('=');
+                        sb.Append('|');
+                        continue;
                     }
-                    if (i > tablo.TabCf[j].Extremite) // supérieur a extrémité
+                    if (i > cond.Extremite)
                     {
-                        for (int k = 0; k <= nbc + 1; k++)
-                        { S = S + " "; }
-                        S = S + "|";
+                        for (int k = 0; k <= nbc + 1; k++) sb.Append(' ');
+                        sb.Append('|');
+                        continue;
                     }
                 }
-
-                this.richTextBox1.Text = richTextBox1.Text + S + "    " + tablo.TabCond[j].condName + "  (" + tablo.TabCond[j].conditionOrigine + "," + tablo.TabCond[j].conditionExtremite + ")\n";
-                j = j + 1;
+                richTextBox1.AppendText(sb.ToString());
+                richTextBox1.AppendText("    " + tablo.TabCond[j].Name + "  (" + tablo.TabCond[j].Origine + "," + tablo.TabCond[j].Extremite + ")\n");
+                j++;
             }
-            this.richTextBox1.Text = richTextBox1.Text + "\n";
+            richTextBox1.AppendText("\n");
         }
-        public void infoCond(cond C)
+
+        public void infoCond(Cond C)
         {
-            MessageBox.Show("nom condition = " + C1.condName + "\n" + "origine  " + C1.condOrigine.ToString() + " \nExtrémité  " + C1.conditionExtremite.ToString() + "\nCote moyenne = " + C1.conditionCmoy.ToString() + "\n IT = " + C1.conditionIT.ToString());
-            MessageBox.Show("nom condition = " + cf1.cfname + "\n" + "origine  " + cf1.cfOrigine + " \nExtrémité  " + cf1.cfExtremite + " \ncote moyenne   " + cf1.cfCmoy + " \nDl origine  " + cf1.cfDlOrigine + " \n Dl Extrémité  " + cf1.cfExtremite);
-            //int a = -999;   // pour mise au point message d'erreur
-            // testInt("-12.", a);            
+            if (C == null) return;
+            MessageBox.Show("nom condition = " + C.Name + "\n" + "origine  " + C.Origine + " \nExtrémité  " + C.Extremite + "\nCote moyenne = " + C.Cmoy + " \nIT = " + C.IT);
         }
+
         public void testInt(string s, int i)
         {
-            bool result = int.TryParse(s, out i);
-            if (result) { result = true; } else { MessageBox.Show(s + " n'est pas un entier"); }
+            if (!int.TryParse(s, out i))
+            {
+                MessageBox.Show(s + " n'est pas un entier");
+            }
         }
 
         private void numericUpDownFont_ValueChanged(object sender, EventArgs e)
         {
-            t = Convert.ToInt32(this.numericUpDownFont.Value);       
+            t = Convert.ToInt32(this.numericUpDownFont.Value);
             this.richTextBox1.Font = new Font("Courier New", t, FontStyle.Regular);
             afficheToutCf(lgc);
         }
 
         private void numericUpDownCote_ValueChanged(object sender, EventArgs e)
         {
-            lgc =Convert.ToInt32( this.numericUpDownCote.Value);
+            lgc = Convert.ToInt32(this.numericUpDownCote.Value);
             afficheToutCf(lgc);
         }
-
-
     }
 }
-
-
